@@ -1,4 +1,4 @@
-package com.example.m.customviewtest;
+package com.example.m.customviewtest.ui;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

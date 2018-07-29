@@ -9,7 +9,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+
+import com.example.m.customviewtest.ui.BallActivity;
+import com.example.m.customviewtest.ui.Page1Fragment;
+import com.example.m.customviewtest.ui.Page2Fragment;
 
 public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;

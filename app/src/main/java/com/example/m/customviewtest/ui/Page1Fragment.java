@@ -1,4 +1,4 @@
-package com.example.m.customviewtest;
+package com.example.m.customviewtest.ui;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.m.customviewtest.R;
 import com.example.m.customviewtest.views.LineView;
 import com.example.m.customviewtest.views.SquareView;
 
