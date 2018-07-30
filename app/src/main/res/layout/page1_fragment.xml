@@ -7,12 +7,10 @@
     <com.example.m.customviewtest.views.SquareView
         android:id="@+id/circle_view"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:onClick="onClick" />
+        android:layout_height="200dp" />
 
     <com.example.m.customviewtest.views.LineView
         android:id="@+id/indicator_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:onClick="onClick" />
+        android:layout_height="match_parent" />
 </LinearLayout>

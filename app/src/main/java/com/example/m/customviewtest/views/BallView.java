@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.Date;
+
 public class BallView extends View {
     private static final String TAG = "BallView";
     private static final String PROPERTY_X = "distance_x";
@@ -22,13 +24,20 @@ public class BallView extends View {
     private Paint paint;
     private int ballRadius = 50;
     private Path path = new Path();
-    int x = 0;
-    int y = 0;
-    float startX = 0;
-    float startY = 0;
+    int x;
+    int y;
+    float startX;
+    float startY;
     private boolean isChangePosition;
     private float stopY;
     private float stopX;
+    private int previousX;
+    private int previousY;
+    private long previousTime;
+    private int moveX;
+    private int moveY;
+    private long interval;
+    private boolean disable;
 
     public BallView(Context context) {
         super(context);
@@ -38,7 +47,18 @@ public class BallView extends View {
         super(context, attrs);
     }
 
-    protected void animationSquare() {
+    public void init() {
+        x = width / 2;
+        y = height - ballRadius;
+        stopY = 0;
+        stopX = 0;
+        moveX = 0;
+        moveY = 0;
+        disable=false;
+        invalidate();
+    }
+
+    protected void animationBall() {
         paint = new Paint();
         paint.setColor(Color.GREEN);
         PropertyValuesHolder propertyDistanceX = PropertyValuesHolder.ofInt(PROPERTY_X, 0, 150);
@@ -48,29 +68,34 @@ public class BallView extends View {
 //        valueAnimator.setInterpolator(new BounceInterpolator());
 //        valueAnimator.setInterpolator(new CycleInterpolator(1));
         valueAnimator.setDuration(3000);
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                stopX = (int) animation.getAnimatedValue(PROPERTY_X);
-                stopY = (int) animation.getAnimatedValue(PROPERTY_Y);
-                Log.i(TAG, "lengthMoveUp: ");
+        valueAnimator.addUpdateListener(animation -> {
+//            stopX = (int) animation.getAnimatedValue(PROPERTY_X);
+//            stopY = (int) animation.getAnimatedValue(PROPERTY_Y);
+            if (!checkDistance() || (moveX == 0 && moveY == 0)) {
+                endMove();
+            } else {
+                stopX += moveX;
+                stopY += moveY;
+                runBall();
                 invalidate();
             }
-        });
+         });
         valueAnimator.start();
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int action = event.getAction() & MotionEvent.ACTION_MASK;
-
+        if (disable) {
+            return false;
+        }
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 path.moveTo(event.getX(), event.getY());
                 if (isContain(event)) {
-                    Log.i(TAG, "setMotionEvent: " + event.getY() + "  " + (height - ballRadius));
                     startX = event.getX();
                     startY = event.getY();
+                    previousTime = new Date().getTime();
                     isChangePosition = true;
                 }
                 break;
@@ -80,28 +105,80 @@ public class BallView extends View {
                 break;
             case MotionEvent.ACTION_UP:
                 isChangePosition = false;
-                x = (int) (x + stopX);
-                y = (int) (y + stopY);
-                stopX = 0;
-                stopY = 0;
+                disable = true;
+                runBall();
+//                animationBall();
+                endMove();
                 break;
         }
         invalidate();
         return true;
     }
 
+    private void runBall() {
+        postDelayed(() -> {
+            if (!checkDistance() || (moveX == 0 && moveY == 0)) {
+                endMove();
+            } else {
+                stopX += moveX;
+                stopY += moveY;
+                runBall();
+                invalidate();
+            }
+
+        }, interval);
+    }
+
+    private boolean checkDistance() {
+        if (x + (stopX + moveX) > width - ballRadius) {
+            stopX = 0;
+            x = width - ballRadius;
+            moveX = moveX * -1;
+        }
+        if (x + (stopX + moveX) < ballRadius) {
+            stopX = 0;
+            x = ballRadius;
+            moveX = moveX * -1;
+        }
+        if (y + (stopY + moveY) > height - ballRadius) {
+            stopY = 0;
+            y = height - ballRadius;
+            moveY = moveY * -1;
+        }
+        if (y + (stopY + moveY) < ballRadius) {
+            stopY = 0;
+            y = ballRadius;
+            moveY = moveY * -1;
+        }
+
+        return true;
+    }
+
+    private void endMove() {
+        x = (int) (x + stopX);
+        y = (int) (y + stopY);
+        stopX = 0;
+        stopY = 0;
+    }
+
     private void changePosition(MotionEvent event) {
         if (isChangePosition) {
+            moveX = (int) (event.getX() - previousX);
+            moveY = (int) (event.getY() - previousY);
+            interval = new Date().getTime() - previousTime;
+            Log.i(TAG, "onTouchEvent moveX=" + moveX + " moveY=" + moveY + " interval=" + interval);
+
+            previousTime = new Date().getTime();
+            previousX = (int) event.getX();
+            previousY = (int) event.getY();
             float vx = event.getX() - startX;
             if ((x + vx) < width - ballRadius && (x + vx) > ballRadius) {
-                stopX = (int) (event.getX() - startX);
+                stopX = vx;
             }
             float vy = event.getY() - startY;
             if ((y + vy) < height - ballRadius && (y + vy) > ballRadius) {
-                stopY = (int) (event.getY() - startY);
+                stopY = vy;
             }
-            Log.i(TAG, "onTouchEvent: " + y + "  " + event.getY() + "  " + (int) (event.getY() - startY));
-//                    invalidate();
         }
     }
 
@@ -128,7 +205,7 @@ public class BallView extends View {
         }
 
         paint = new Paint();
-        paint.setColor(Color.GREEN);
+        paint.setColor(Color.RED);
 
         canvas.drawCircle(x + stopX, y + stopY, ballRadius, paint);
 
