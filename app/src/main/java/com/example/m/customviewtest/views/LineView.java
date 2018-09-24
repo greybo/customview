@@ -64,13 +64,10 @@ public class LineView extends View {
 //        valueAnimator.setInterpolator(new BounceInterpolator());
 //        valueAnimator.setInterpolator(new CycleInterpolator(1));
         valueAnimator.setDuration(500);
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                lengthMoveUp = (int) animation.getAnimatedValue(PROPERTY_LINE);
-                Log.i(TAG, "lengthMoveUp: " + lengthMoveUp);
-                invalidate();
-            }
+        valueAnimator.addUpdateListener(animation -> {
+            lengthMoveUp = (int) animation.getAnimatedValue(PROPERTY_LINE);
+            Log.i(TAG, "lengthMoveUp: " + lengthMoveUp);
+            invalidate();
         });
         valueAnimator.start();
     }
@@ -85,14 +82,11 @@ public class LineView extends View {
 //        valueAnimator.setInterpolator(new BounceInterpolator());
 //        valueAnimator.setInterpolator(new CycleInterpolator(1));
         valueAnimator.setDuration(3000);
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                radius = (int) animation.getAnimatedValue(PROPERTY_RADIUS);
-                rotate = (int) animation.getAnimatedValue(PROPERTY_ROTATE);
-                Log.i(TAG, "lengthMoveUp: " + lengthMoveUp);
-                invalidate();
-            }
+        valueAnimator.addUpdateListener(animation -> {
+            radius = (int) animation.getAnimatedValue(PROPERTY_RADIUS);
+            rotate = (int) animation.getAnimatedValue(PROPERTY_ROTATE);
+            Log.i(TAG, "lengthMoveUp: " + lengthMoveUp);
+            invalidate();
         });
         valueAnimator.start();
     }
@@ -101,13 +95,10 @@ public class LineView extends View {
         ValueAnimator valueAnimator = new ValueAnimator();
         valueAnimator.setValues(propertyLine);
         valueAnimator.setDuration(500);
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                lengthMoveRight = (int) animation.getAnimatedValue(PROPERTY_LINE);
-                Log.i(TAG, "lengthMoveRight: " + lengthMoveRight);
-                invalidate();
-            }
+        valueAnimator.addUpdateListener(animation -> {
+            lengthMoveRight = (int) animation.getAnimatedValue(PROPERTY_LINE);
+            Log.i(TAG, "lengthMoveRight: " + lengthMoveRight);
+            invalidate();
         });
         valueAnimator.start();
     }
@@ -117,12 +108,9 @@ public class LineView extends View {
         ValueAnimator valueAnimator = new ValueAnimator();
         valueAnimator.setValues(propertyLine);
         valueAnimator.setDuration(500);
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                lengthMoveWord = (int) animation.getAnimatedValue(PROPERTY_LINE);
-                invalidate();
-            }
+        valueAnimator.addUpdateListener(animation -> {
+            lengthMoveWord = (int) animation.getAnimatedValue(PROPERTY_LINE);
+            invalidate();
         });
         valueAnimator.start();
     }

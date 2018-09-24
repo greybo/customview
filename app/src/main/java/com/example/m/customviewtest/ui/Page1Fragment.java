@@ -30,18 +30,16 @@ public class Page1Fragment extends Fragment {
         return view;
     }
 
-    View.OnClickListener listener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            switch (view.getId()) {
-                case R.id.indicator_view:
-                    lineView.init();
-                    break;
-                case R.id.circle_view:
-                    squareView.init();
-                    break;
-            }
+    View.OnClickListener listener = v -> {
+        switch (v.getId()) {
+            case R.id.indicator_view:
+                lineView.init();
+                break;
+            case R.id.circle_view:
+                squareView.init();
+                break;
         }
     };
+
 
 }

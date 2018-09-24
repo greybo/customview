@@ -14,7 +14,7 @@ import com.example.m.customviewtest.ui.BallActivity;
 import com.example.m.customviewtest.ui.Page1Fragment;
 import com.example.m.customviewtest.ui.Page2Fragment;
 
-public class MainActivity extends AppCompatActivity {
+public class OtherViewActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private PagesAdapter pagesAdapter;
 
@@ -27,22 +27,6 @@ public class MainActivity extends AppCompatActivity {
         pagesAdapter = new PagesAdapter(getSupportFragmentManager());
         viewPager.setAdapter(pagesAdapter);
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add("ball view");
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getTitle().toString()) {
-            case "ball view":
-                startActivity(new Intent(this, BallActivity.class));
-                break;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     class PagesAdapter extends FragmentPagerAdapter {
